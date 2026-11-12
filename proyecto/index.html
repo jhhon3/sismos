@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Seismic Sentinel - Prevención Sísmica & Alerta Temprana</title>
+    
+    <!-- CDNs Externos -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+    
+    <!-- Configuración exacta de Tailwind desde el archivo de diseño -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#263143",
+                        "on-background": "#d3e4fe",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "inverse-surface": "#d3e4fe",
+                        "surface-container-high": "#1b2b3f",
+                        "outline": "#ab8986",
+                        "outline-variant": "#5b403e",
+                        "on-primary-fixed-variant": "#930013",
+                        "primary": "#ffb3ad",
+                        "secondary-fixed-dim": "#bcc7de",
+                        "surface-variant": "#26364a",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#111c2d",
+                        "on-primary-container": "#5c0008",
+                        "on-surface-variant": "#e4beba",
+                        "inverse-on-surface": "#213145",
+                        "surface-tint": "#ffb3ad",
+                        "error": "#ffb4ab",
+                        "tertiary": "#ffb95f",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-primary-fixed": "#410004",
+                        "on-tertiary": "#472a00",
+                        "background": "#031427",
+                        "on-tertiary-container": "#3e2400",
+                        "surface-container-low": "#0b1c30",
+                        "on-secondary-container": "#aeb9d0",
+                        "primary-container": "#ff5451",
+                        "surface-bright": "#2a3a4f",
+                        "secondary": "#bcc7de",
+                        "on-surface": "#d3e4fe",
+                        "error-container": "#93000a",
+                        "surface-dim": "#031427",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "secondary-container": "#3e495d",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#ffb3ad",
+                        "surface": "#031427",
+                        "on-primary": "#68000a",
+                        "primary-fixed": "#ffdad7",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface-container-highest": "#26364a",
+                        "surface-container": "#102034",
+                        "inverse-primary": "#b91a24",
+                        "secondary-fixed": "#d8e3fb",
+                        "surface-container-lowest": "#000f21",
+                        "tertiary-container": "#ca8100"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "container-max": "1440px",
+                        "unit": "4px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "display-alert": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-alert-mobile": ["Inter"],
+                        "label-caps": ["JetBrains Mono"],
+                        "data-mono": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-alert": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-alert-mobile": ["36px", { "lineHeight": "42px", "fontWeight": "800" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "data-mono": ["18px", { "lineHeight": "24px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="styles.css"/>
+</head>
+<body class="bg-background text-on-background font-body-md h-screen overflow-hidden flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-outline-variant flat flex justify-between items-center w-full px-margin-desktop h-16 z-20 shrink-0">
+    <div class="flex items-center gap-4">
+        <span class="material-symbols-outlined text-primary text-3xl">sensors</span>
+        <h1 class="font-headline-md text-headline-md font-extrabold text-primary tracking-tight">Seismic Sentinel</h1>
+    </div>
+    <div class="flex items-center gap-6">
+        <div class="relative hidden md:flex items-center">
+            <span class="material-symbols-outlined absolute left-3 text-on-surface-variant">search</span>
+            <input class="bg-surface-variant text-on-surface pl-10 pr-4 py-2 rounded border border-outline-variant focus:border-white focus:ring-0 transition-colors w-64 text-sm font-label-caps placeholder:text-on-surface-variant/50" placeholder="Buscar telemetría..." type="text"/>
+        </div>
+        <div class="flex items-center gap-4">
+            <button class="text-on-surface hover:text-primary-container transition-colors flex items-center justify-center h-10 w-10 rounded-full hover:bg-surface-variant">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+            </button>
+            <button class="text-on-surface hover:text-primary-container transition-colors flex items-center justify-center h-10 w-10 rounded-full hover:bg-surface-variant">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="flex flex-1 overflow-hidden">
+    <!-- SideNavBar (Desktop) -->
+    <aside class="hidden md:flex flex-col h-full py-gutter px-4 bg-surface-container-low border-r border-outline-variant w-64 shrink-0 overflow-y-auto">
+        <div class="mb-8 p-4 bg-surface-variant rounded-lg border border-outline-variant">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="h-10 w-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+                    <span class="material-symbols-outlined">shield_person</span>
+                </div>
+                <div>
+                    <div class="font-headline-md text-sm font-bold text-on-surface">Seismic Watch</div>
+                    <div class="font-label-caps text-[10px] text-tertiary">Vigilancia: Alta</div>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="flex-1 space-y-2">
+            <a class="flex items-center gap-3 py-3 text-primary font-bold border-l-2 border-primary pl-2 bg-surface-container-high/50 rounded-r" href="#proyecto">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                <span class="font-label-caps text-label-caps">El Proyecto</span>
+            </a>
+            <a class="flex items-center gap-3 py-3 text-on-surface-variant pl-2 hover:bg-surface-container-high transition-colors rounded" href="#problematica">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">warning</span>
+                <span class="font-label-caps text-label-caps">Problemática</span>
+            </a>
+            <a class="flex items-center gap-3 py-3 text-on-surface-variant pl-2 hover:bg-surface-container-high transition-colors rounded" href="#solucion">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">memory</span>
+                <span class="font-label-caps text-label-caps">Circuito & Hardware</span>
+            </a>
+            <a class="flex items-center gap-3 py-3 text-on-surface-variant pl-2 hover:bg-surface-container-high transition-colors rounded" href="#notificaciones">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">smartphone</span>
+                <span class="font-label-caps text-label-caps">Alerta Móvil</span>
+            </a>
+            <a class="flex items-center gap-3 py-3 text-tertiary font-bold pl-2 hover:bg-surface-container-high transition-colors rounded border-l-2 border-tertiary" href="#proceso-proyecto">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">engineering</span>
+                <span class="font-label-caps text-label-caps">Página 2: Proceso</span>
+            </a>
+            <a class="flex items-center gap-3 py-3 text-[#4ADE80] font-bold pl-2 hover:bg-surface-container-high transition-colors rounded" href="#planificador-semanal">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">calendar_month</span>
+                <span class="font-label-caps text-label-caps">Cronograma (6 Ws)</span>
+            </a>
+        </nav>
+
+        <div class="mt-auto pt-6 space-y-4">
+            <button class="w-full bg-surface-variant hover:bg-primary-container text-on-surface hover:text-on-primary-container border border-outline-variant font-label-caps py-3 rounded transition-colors flex justify-center items-center gap-2">
+                <span class="material-symbols-outlined text-sm">fact_check</span>
+                System Check
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-gutter md:p-margin-desktop overflow-y-auto bg-background space-y-8">
+        <div class="max-w-container-max mx-auto space-y-8">
+            
+            <!-- Hero / Resumen del Proyecto -->
+            <section id="proyecto" class="bg-surface-container-high p-8 rounded-xl border border-outline-variant relative overflow-hidden">
+                <header class="max-w-3xl space-y-4">
+                    <span class="font-label-caps text-xs text-primary bg-primary-container/20 px-2 py-1 rounded inline-block">PROYECTO DE PREVENCIÓN SÍSMICA</span>
+                    <h2 class="font-headline-lg text-headline-lg text-on-surface font-extrabold">
+                        Reduciendo la latencia en alertas sísmicas mediante IoT local
+                    </h2>
+                    <p class="text-on-surface-variant font-body-md">
+                        Las alertas sísmicas convencionales sufren de retrasos críticos en la red. Nuestro proyecto utiliza un sensor de alta precisión en una protoboard conectado a una red local para procesar las vibraciones iniciales y enviar un aviso de emergencia <strong>directamente al teléfono móvil</strong> antes de que lleguen las ondas destructivas.
+                    </p>
+                </header>
+            </section>
+
+            <!-- Status Row (Métricas Rápidas con estilo Bento) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-surface-container-high p-6 rounded-lg border-l-4 border-l-[#4ADE80] border border-outline-variant flex items-center gap-4 relative overflow-hidden group">
+                    <div class="h-12 w-12 rounded-full bg-[#4ADE80]/10 flex items-center justify-center text-[#4ADE80] shrink-0">
+                        <span class="material-symbols-outlined text-3xl">public</span>
+                    </div>
+                    <div>
+                        <p class="font-label-caps text-on-surface-variant mb-1">Ground Status</p>
+                        <h3 class="font-headline-md text-on-surface">Estable</h3>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-6 rounded-lg border border-outline-variant flex items-center gap-4 hover:bg-surface-variant transition-colors">
+                    <div class="h-12 w-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container shrink-0">
+                        <span class="material-symbols-outlined text-3xl">battery_charging_full</span>
+                    </div>
+                    <div>
+                        <p class="font-label-caps text-on-surface-variant mb-1">Sensor Battery</p>
+                        <div class="flex items-end gap-2">
+                            <h3 class="font-data-mono text-xl text-on-surface">98%</h3>
+                            <span class="text-xs text-[#4ADE80] mb-1">Charging</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-6 rounded-lg border border-outline-variant flex items-center gap-4 hover:bg-surface-variant transition-colors">
+                    <div class="h-12 w-12 rounded-full bg-surface-variant flex items-center justify-center text-on-surface shrink-0">
+                        <span class="material-symbols-outlined text-3xl">update</span>
+                    </div>
+                    <div>
+                        <p class="font-label-caps text-on-surface-variant mb-1">Last Activity</p>
+                        <h3 class="font-headline-md text-on-surface">Hace 2 min</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bento Grid: Hardware & Sismógrafo Animado -->
+            <div id="problematica" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Hardware Viewer -->
+                <div class="lg:col-span-1 bg-surface-container-low rounded-xl border border-outline-variant overflow-hidden flex flex-col relative">
+                    <div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-high">
+                        <h2 class="font-label-caps text-on-surface flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm">memory</span>
+                            Primary Sensor Node
+                        </h2>
+                        <span class="px-2 py-1 rounded-full bg-[#4ADE80]/15 text-[#4ADE80] font-label-caps text-[10px] flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#4ADE80] animate-pulse"></span>
+                            Connected
+                        </span>
+                    </div>
+                    <div class="flex-1 bg-surface-dim relative flex items-center justify-center p-6 min-h-[300px]">
+                        <!-- Imagen con vista previa Zoom al pasar cursor y visor Modal al dar Clic -->
+                        <img alt="Circuito Protoboard Seismic Sentinel" 
+                             class="zoomable-img w-full h-auto object-contain max-h-full drop-shadow-2xl" 
+                             src="semana6.png"/>
+                        <div class="absolute top-4 left-4 font-data-mono text-xs text-on-surface-variant/50">NODE_ID: AX-774</div>
+                        <div class="absolute bottom-4 right-4 font-data-mono text-xs text-[#4ADE80]/70 flex items-center gap-1">
+                            LINK_STABLE <span class="material-symbols-outlined text-[14px]">wifi_tethering</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seismograph Visualization -->
+                <div class="lg:col-span-2 bg-surface-container-low rounded-xl border border-outline-variant overflow-hidden flex flex-col">
+                    <div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-high">
+                        <h2 class="font-label-caps text-on-surface flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm">show_chart</span>
+                            Real-time Seismograph
+                        </h2>
+                        <div class="flex items-center gap-4">
+                            <span class="font-data-mono text-xs text-on-surface-variant">Freq: 100Hz</span>
+                            <span class="font-data-mono text-xs text-on-surface-variant">Gain: x10</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 relative bg-surface-dim seismograph-grid overflow-hidden min-h-[300px] flex items-center justify-center p-4">
+                        <div class="w-[200%] h-full absolute top-0 left-0 flex animated-wave">
+                            <svg class="w-1/2 h-full" preserveaspectratio="none" viewbox="0 0 1000 100">
+                                <path class="opacity-80" d="M0,50 L50,50 L55,40 L60,60 L65,45 L70,55 L75,50 L150,50 L155,42 L160,58 L165,48 L170,52 L175,50 L250,50 L255,35 L260,65 L265,45 L270,55 L275,50 L350,50 L355,45 L360,55 L365,48 L370,52 L375,50 L450,50 L455,30 L460,70 L465,40 L470,60 L475,50 L550,50 L555,42 L560,58 L565,48 L570,52 L575,50 L650,50 L655,38 L660,62 L665,45 L670,55 L675,50 L750,50 L755,45 L760,55 L765,48 L770,52 L775,50 L850,50 L855,35 L860,65 L865,45 L870,55 L875,50 L950,50 L955,40 L960,60 L965,45 L970,55 L975,50 L1000,50" fill="none" stroke="#4ADE80" stroke-width="1.5"></path>
+                            </svg>
+                            <svg class="w-1/2 h-full" preserveaspectratio="none" viewbox="0 0 1000 100">
+                                <path class="opacity-80" d="M0,50 L50,50 L55,40 L60,60 L65,45 L70,55 L75,50 L150,50 L155,42 L160,58 L165,48 L170,52 L175,50 L250,50 L255,35 L260,65 L265,45 L270,55 L275,50 L350,50 L355,45 L360,55 L365,48 L370,52 L375,50 L450,50 L455,30 L460,70 L465,40 L470,60 L475,50 L550,50 L555,42 L560,58 L565,48 L570,52 L575,50 L650,50 L655,38 L660,62 L665,45 L670,55 L675,50 L750,50 L755,45 L760,55 L765,48 L770,52 L775,50 L850,50 L855,35 L860,65 L865,45 L870,55 L875,50 L950,50 L955,40 L960,60 L965,45 L970,55 L975,50 L1000,50" fill="none" stroke="#4ADE80" stroke-width="1.5"></path>
+                            </svg>
+                        </div>
+                        <div class="absolute top-0 bottom-0 w-1 bg-[#4ADE80]/30 shadow-[0_0_10px_2px_#4ADE80] scan-bar z-10"></div>
+                    </div>
+                    <div class="grid grid-cols-4 border-t border-outline-variant bg-surface p-2 divide-x divide-outline-variant text-center">
+                        <div class="p-2">
+                            <div class="font-label-caps text-[10px] text-on-surface-variant">P-Wave Int.</div>
+                            <div class="font-data-mono text-sm text-on-surface">0.02g</div>
+                        </div>
+                        <div class="p-2">
+                            <div class="font-label-caps text-[10px] text-on-surface-variant">S-Wave Int.</div>
+                            <div class="font-data-mono text-sm text-on-surface">0.01g</div>
+                        </div>
+                        <div class="p-2">
+                            <div class="font-label-caps text-[10px] text-on-surface-variant">Displacement</div>
+                            <div class="font-data-mono text-sm text-on-surface">0.05mm</div>
+                        </div>
+                        <div class="p-2">
+                            <div class="font-label-caps text-[10px] text-on-surface-variant">Status</div>
+                            <div class="font-data-mono text-sm text-[#4ADE80]">NORMAL</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Hardware / Protoboard y Notificación -->
+            <section id="solucion" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <article class="bg-surface-container-low rounded-xl border border-outline-variant p-6 space-y-4">
+                    <header class="flex items-center justify-between border-b border-outline-variant pb-3">
+                        <h3 class="font-headline-md text-lg text-on-surface flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">developer_board</span>
+                            Circuito en Protoboard
+                        </h3>
+                        <span class="font-label-caps text-xs text-tertiary">Hardware Node</span>
+                    </header>
+                    <p class="text-sm text-on-surface-variant">
+                        El circuito físico está ensamblado en una protoboard para validación de concepto. Consta de los siguientes componentes:
+                    </p>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                        <li class="bg-surface-variant p-3 rounded border border-outline-variant">
+                            <strong class="block text-xs text-primary mb-1">Microcontrolador (ESP32 / Wi-Fi)</strong>
+                            <p class="text-xs text-on-surface-variant">Procesa la señal localmente y gestiona el envío de la notificación por red.</p>
+                        </li>
+                        <li class="bg-surface-variant p-3 rounded border border-outline-variant">
+                            <strong class="block text-xs text-tertiary mb-1">Sensor MPU6050 / Acelerómetro</strong>
+                            <p class="text-xs text-on-surface-variant">Mide la aceleración sísmica y filtra falsos movimientos.</p>
+                        </li>
+                        <li class="bg-surface-variant p-3 rounded border border-outline-variant">
+                            <strong class="block text-xs text-[#4ADE80] mb-1">Zumbador / Buzzer (Opcional)</strong>
+                            <p class="text-xs text-on-surface-variant">Proporciona una alarma sonora inmediata en el lugar del sensor.</p>
+                        </li>
+                        <li class="bg-surface-variant p-3 rounded border border-outline-variant">
+                            <strong class="block text-xs text-secondary mb-1">Lógica de Calibración</strong>
+                            <p class="text-xs text-on-surface-variant">Algoritmo en código para activar la alerta al superar un umbral crítico.</p>
+                        </li>
+                    </ul>
+                </article>
+
+                <article id="notificaciones" class="bg-surface-container-low rounded-xl border border-outline-variant p-6 space-y-4 flex flex-col justify-between">
+                    <header>
+                        <div class="flex items-center justify-between border-b border-outline-variant pb-3 mb-4">
+                            <h3 class="font-headline-md text-lg text-on-surface flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">phoning</span>
+                                Notificación en Celular
+                            </h3>
+                            <span class="font-label-caps text-xs text-[#4ADE80]">API / Webhook</span>
+                        </div>
+                        <p class="text-sm text-on-surface-variant">
+                            Al detectarse la vibración en la protoboard, el microcontrolador hace una petición HTTP directa enviando un mensaje de alerta.
+                        </p>
+                    </header>
+
+                    <aside class="bg-surface-dim p-4 rounded-xl border border-outline-variant max-w-sm mx-auto w-full space-y-3 shadow-lg" aria-label="Simulación de Notificación Móvil">
+                        <header class="flex justify-between items-center text-[10px] text-on-surface-variant border-b border-outline-variant/30 pb-2">
+                            <span class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-xs">notifications_active</span> SEISMIC SENTINEL BOT
+                            </span>
+                            <time>Ahora</time>
+                        </header>
+                        <div class="bg-error-container/40 p-3 rounded-lg border border-primary-container text-on-error-container">
+                            <strong class="font-bold text-sm flex items-center gap-2 text-primary">
+                                <span class="material-symbols-outlined">warning</span>
+                                ¡ALERTA SÍSMICA TEMPRANA!
+                            </strong>
+                            <p class="text-xs mt-1 text-on-surface">
+                                Vibración detectada en la estación local. Mantenga la calma y busque un lugar seguro.
+                            </p>
+                            <small class="block font-data-mono text-[10px] mt-2 text-primary/80">
+                                Intensidad estimada: Moderada | Tiempo de respuesta: 0.32s
+                            </small>
+                        </div>
+                    </aside>
+                </article>
+            </section>
+
+            <!-- ======================================================== -->
+            <!-- PÁGINA 2 — PROCESO DEL PROYECTO                          -->
+            <!-- ======================================================== -->
+            <section id="proceso-proyecto" class="pt-8 border-t-2 border-outline-variant/50 space-y-8">
+                
+                <header class="bg-surface-container-high p-6 rounded-xl border border-tertiary/30">
+                    <span class="font-label-caps text-xs text-tertiary bg-tertiary-container/20 px-2 py-1 rounded inline-block mb-2">PÁGINA 2</span>
+                    <h2 class="font-headline-lg text-headline-lg text-on-surface font-extrabold flex items-center gap-3">
+                        <span class="material-symbols-outlined text-tertiary text-3xl">engineering</span>
+                        Proceso del Proyecto
+                    </h2>
+                    <p class="text-on-surface-variant font-body-md mt-2">
+                        Documentación detallada sobre la concepción, investigación, construcción y pruebas de nuestro prototipo.
+                    </p>
+                </header>
+
+                <!-- TABLA DE PLANIFICACIÓN SEMANAL (6 SEMANAS CON SOPORTE PARA GOOGLE DRIVE Y ZOOM) -->
+                <article id="planificador-semanal" class="bg-surface-container-low p-6 rounded-xl border border-outline-variant space-y-4">
+                    <header class="flex items-center justify-between border-b border-outline-variant pb-3">
+                        <h3 class="font-headline-md text-xl text-on-surface flex items-center gap-2">
+                            <span class="material-symbols-outlined text-tertiary">calendar_month</span>
+                            Planificador de Avances del Proyecto (6 Semanas)
+                        </h3>
+                        <span class="font-label-caps text-xs text-[#4ADE80]">Cronograma Activo</span>
+                    </header>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-on-surface-variant border-collapse">
+                            <thead>
+                                <tr class="border-b border-outline-variant text-on-surface font-label-caps bg-surface-variant/50">
+                                    <th class="p-3">Semana</th>
+                                    <th class="p-3">Enfoque Principal</th>
+                                    <th class="p-3">Entregables y Objetivos</th>
+                                    <th class="p-3">Estado</th>
+                                    <th class="p-3">Enlace & Evidencia (Drive / Tinkercad)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-outline-variant/30">
+                                <!-- Semana 1 -->
+                                <tr>
+                                    <td class="p-3 font-bold text-primary align-top">Semana 1</td>
+                                    <td class="p-3 align-top">Investigación & Entorno</td>
+                                    <td class="p-3 align-top">Diseño del circuito base en Tinkercad (Arduino UNO, Protoboard, Osciloscopio, LEDs y Buzzer).</td>
+                                    <td class="p-3 align-top"><span class="bg-[#4ADE80]/20 text-[#4ADE80] px-2 py-0.5 rounded font-label-caps">Completado</span></td>
+                                    <td class="p-3 space-y-2">
+                                        <figure class="m-0 bg-surface-dim p-2 rounded border border-outline-variant/50 max-w-xs overflow-hidden">
+                                            <img src="imagen.png" 
+                                                 alt="Circuito Base Tinkercad Semana 1" 
+                                                 class="zoomable-img w-full h-auto rounded object-contain"/>
+                                            <figcaption class="text-[10px] text-on-surface-variant mt-1 text-center font-label-caps">Montaje Inicial de Componentes</figcaption>
+                                        </figure>
+                                        <!-- Enlace a Drive o Tinkercad -->
+                                        <a href="https://drive.google.com/YOUR_DRIVE_FILE_ID" target="_blank" class="text-tertiary underline hover:text-primary flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-xs">link</span> Abrir en Drive / Tinkercad
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- Semana 2 -->
+                                <tr>
+                                    <td class="p-3 font-bold text-primary align-top">Semana 2</td>
+                                    <td class="p-3 align-top">Detección de Movimiento</td>
+                                    <td class="p-3 align-top">Integración del sensor piezoeléctrico/acelerómetro y lectura de valores analógicos en tiempo real.</td>
+                                    <td class="p-3 align-top"><span class="bg-[#4ADE80]/20 text-[#4ADE80] px-2 py-0.5 rounded font-label-caps">Completado</span></td>
+                                    <td class="p-3 space-y-2">
+                                        <figure class="m-0 bg-surface-dim p-2 rounded border border-outline-variant/50 max-w-xs overflow-hidden">
+                                            <img src="semana2.png" 
+                                                 alt="Circuito Sensor Semana 2" 
+                                                 class="zoomable-img w-full h-auto rounded object-contain"/>
+                                            <figcaption class="text-[10px] text-on-surface-variant mt-1 text-center font-label-caps">Lectura Analógica de Sensor</figcaption>
+                                        </figure>
+                                        <a href="https://drive.google.com/YOUR_DRIVE_FILE_ID" target="_blank" class="text-tertiary underline hover:text-primary flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-xs">link</span> Abrir en Drive / Tinkercad
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- Semana 3 -->
+                                <tr>
+                                    <td class="p-3 font-bold text-primary align-top">Semana 3</td>
+                                    <td class="p-3 align-top">Filtrado & Calibración</td>
+                                    <td class="p-3 align-top">Programación de umbrales en C++ para eliminar falsos positivos por golpeteos suaves.</td>
+                                    <td class="p-3 align-top"><span class="bg-[#4ADE80]/20 text-[#4ADE80] px-2 py-0.5 rounded font-label-caps">Completado</span></td>
+                                    <td class="p-3 space-y-2">
+                                        <figure class="m-0 bg-surface-dim p-2 rounded border border-outline-variant/50 max-w-xs overflow-hidden">
+                                            <img src="semana3.png" 
+                                                 alt="Calibración Umbrales Semana 3" 
+                                                 class="zoomable-img w-full h-auto rounded object-contain"/>
+                                            <figcaption class="text-[10px] text-on-surface-variant mt-1 text-center font-label-caps">Prueba de Calibración C++</figcaption>
+                                        </figure>
+                                        <a href="https://drive.google.com/YOUR_DRIVE_FILE_ID" target="_blank" class="text-tertiary underline hover:text-primary flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-xs">link</span> Abrir en Drive / Tinkercad
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- SEMANA 4 -->
+                                <tr>
+                                    <td class="p-3 font-bold text-primary align-top">Semana 4</td>
+                                    <td class="p-3 align-top">Comunicación Serial / IoT</td>
+                                    <td class="p-3 align-top">Formateo de tramas de datos transmitidas por el Puerto Serial simulando un módulo Wi-Fi.</td>
+                                    <td class="p-3 align-top"><span class="bg-[#4ADE80]/20 text-[#4ADE80] px-2 py-0.5 rounded font-label-caps">Completado</span></td>
+                                    <td class="p-3 space-y-2">
+                                        <figure class="m-0 bg-surface-dim p-2 rounded border border-outline-variant/50 max-w-xs overflow-hidden">
+                                            <img src="semana4.png" 
+                                                alt="Evidencia Semana 4 - Transmisión Serial IoT" 
+                                                class="zoomable-img w-full h-auto rounded object-contain"/>
+                                            <figcaption class="text-[10px] text-on-surface-variant mt-1 text-center font-label-caps">Transmisión de Datos Serial/Wi-Fi</figcaption>
+                                     </figure>
+                                        <a href="https://drive.google.com/YOUR_DRIVE_FILE_ID" target="_blank" class="text-tertiary underline hover:text-primary flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-xs">link</span> Abrir en Drive / Tinkercad
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- Semana 5 -->
+                                <tr>
+                                  <td class="p-3 font-bold text-primary align-top">Semana 5</td>
+                                  <td class="p-3 align-top">Conexión Web & Alerta Móvil</td>
+                                  <td class="p-3 align-top">Vinculación de señales recibidas con la activación automática de la notificación en celular.</td>
+                                  <td class="p-3 align-top"><span class="bg-[#4ADE80]/20 text-[#4ADE80] px-2 py-0.5 rounded font-label-caps">Completado</span></td>
+                                  <td class="p-3 space-y-2">
+                                       <figure class="m-0 bg-surface-dim p-2 rounded border border-outline-variant/50 max-w-xs overflow-hidden">
+                                         <img src="semana5.png" 
+                                               alt="Evidencia Semana 5 - Alerta Móvil Push" 
+                                                class="zoomable-img w-full h-auto rounded object-contain"/>
+                                          <figcaption class="text-[10px] text-on-surface-variant mt-1 text-center font-label-caps">Recepción de Alerta Push en Celular</figcaption>
+                                     </figure>
+                                     <a href="https://drive.google.com/YOUR_DRIVE_FILE_ID" target="_blank" class="text-tertiary underline hover:text-primary flex items-center gap-1">
+                                          <span class="material-symbols-outlined text-xs">link</span> Abrir en Drive / Tinkercad
+                                      </a>
+                                  </td>
+                                </tr>
+                                <!-- Semana 6 (COMPLETADA) -->
+                                <tr>
+                                    <td class="p-3 font-bold text-primary align-top">Semana 6</td>
+                                    <td class="p-3 align-top">Pruebas Finales & Documentación</td>
+                                    <td class="p-3 align-top">Pruebas de estrés completadas, validación de la simulación en Tinkercad, corrección de tiempos de muestreo y documentación final terminada.</td>
+                                    <td class="p-3 align-top"><span class="bg-[#4ADE80]/20 text-[#4ADE80] px-2 py-0.5 rounded font-label-caps">Completado</span></td>
+                                    <td class="p-3 space-y-2">
+                                    <figure class="m-0 bg-surface-dim p-2 rounded border border-outline-variant/50 max-w-xs overflow-hidden">
+                                            <img src="semana6.png" 
+                                                alt="Simulación Final Terminada Semana 6" 
+                                                class="zoomable-img w-full h-auto rounded object-contain"/>
+                                            <figcaption class="text-[10px] text-on-surface-variant mt-1 text-center font-label-caps">Simulación Final Tinkercad & Notificación</figcaption>
+                                        </figure>
+        <!-- Reemplaza la URL con tu enlace directo de Tinkercad o Google Drive -->
+                                        <a href="https://www.tinkercad.com/things/hrAdhSjRDzb-smashing-jarv-crift/editel?returnTo=https%3A%2F%2Fwww.tinkercad.com%2Fdashboard" target="_blank" rel="noopener noreferrer" class="text-tertiary underline hover:text-primary flex items-center gap-1 font-bold">
+                                            <span class="material-symbols-outlined text-xs">open_in_new</span> Ver Simulación en Tinkercad
+                                        </a>
+                                    </td>
+                                </tr>
+                            </article>
+
+                <!-- 1. Nuestra Idea -->
+                <article class="bg-surface-container-low p-6 rounded-xl border border-outline-variant space-y-4">
+                    <header class="flex items-center gap-3 text-tertiary border-b border-outline-variant pb-3">
+                        <span class="material-symbols-outlined text-2xl">lightbulb</span>
+                        <h3 class="font-headline-md text-xl text-on-surface">1. Nuestra idea 💡</h3>
+                    </header>
+                    <ul class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                        <li class="bg-surface-variant p-4 rounded-lg border border-outline-variant">
+                            <strong class="block text-sm text-primary mb-2">¿Qué queremos construir?</strong>
+                            <p class="text-xs text-on-surface-variant">Un sistema IoT autónomo de alerta sísmica rápida montado en protoboard que notifique al teléfono en tiempo real.</p>
+                        </li>
+                        <li class="bg-surface-variant p-4 rounded-lg border border-outline-variant">
+                            <strong class="block text-sm text-tertiary mb-2">¿Por qué escogimos esta idea?</strong>
+                            <p class="text-xs text-on-surface-variant">Porque vivimos en zonas de riesgo sísmico donde cada segundo de aviso previo puede salvar vidas.</p>
+                        </li>
+                        <li class="bg-surface-variant p-4 rounded-lg border border-outline-variant">
+                            <strong class="block text-sm text-[#4ADE80] mb-2">¿Qué problema queremos solucionar?</strong>
+                            <p class="text-xs text-on-surface-variant">La alta latencia y fallas de las notificaciones públicas cuando las redes de telefonía se colapsan.</p>
+                        </li>
+                    </ul>
+                </article>
+
+                <!-- 2. ¿Qué investigamos? -->
+                <article class="bg-surface-container-low p-6 rounded-xl border border-outline-variant space-y-4">
+                    <header class="flex items-center gap-3 text-tertiary border-b border-outline-variant pb-3">
+                        <span class="material-symbols-outlined text-2xl">search</span>
+                        <h3 class="font-headline-md text-xl text-on-surface">2. ¿Qué investigamos?</h3>
+                    </header>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                        <section class="bg-surface-variant p-4 rounded-lg border border-outline-variant">
+                            <h4 class="font-bold text-xs text-primary mb-2">¿Qué necesitamos aprender?</h4>
+                            <p class="text-xs text-on-surface-variant">Programación de microcontroladores (Arduino/ESP32), lecturas de giroscopio I2C y comunicación serie/webhooks.</p>
+                        </section>
+                        <section class="bg-surface-variant p-4 rounded-lg border border-outline-variant">
+                            <h4 class="font-bold text-xs text-tertiary mb-2">¿Qué información encontramos?</h4>
+                            <p class="text-xs text-on-surface-variant">Las ondas P (primarias) se desplazan más rápido que las destructivas S, permitiendo detectar el sismo fracciones de segundo antes.</p>
+                        </section>
+                        <section class="bg-surface-variant p-4 rounded-lg border border-outline-variant">
+                            <h4 class="font-bold text-xs text-[#4ADE80] mb-2">Fuentes consultadas</h4>
+                            <ul class="text-xs text-on-surface-variant list-disc list-inside space-y-1">
+                                <li>Documentación Oficial Arduino</li>
+                                <li>Datasheet MPU6050</li>
+                                <li>Estudios de Sismología Local</li>
+                            </ul>
+                        </section>
+                    </div>
+                </article>
+
+                <!-- 3. Nuestro diseño -->
+                <article class="bg-surface-container-low p-6 rounded-xl border border-outline-variant space-y-4">
+                    <header class="flex items-center gap-3 text-tertiary border-b border-outline-variant pb-3">
+                        <span class="material-symbols-outlined text-2xl">draw</span>
+                        <h3 class="font-headline-md text-xl text-on-surface">3. Nuestro diseño</h3>
+                    </header>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                        <section class="bg-surface-variant p-4 rounded-lg border border-outline-variant">
+                            <h4 class="font-bold text-xs text-primary mb-2">Boceto Inicial</h4>
+                            <p class="text-xs text-on-surface-variant">Diagrama de conexiones de protoboard vinculando pines VCC, GND, SDA y SCL entre el sensor y el procesador.</p>
+                        </section>
+                        <section class="bg-surface-variant p-4 rounded-lg border border-outline-variant">
+                            <h4 class="font-bold text-xs text-tertiary mb-2">¿Cómo imaginamos el dispositivo?</h4>
+                            <p class="text-xs text-on-surface-variant">Un nodo compacto con carcasa protectora, luz LED de estado e integración Wi-Fi de bajo consumo.</p>
+                        </section>
+                        <section class="bg-surface-variant p-4 rounded-lg border border-outline-variant">
+                            <h4 class="font-bold text-xs text-[#4ADE80] mb-2">¿Qué queremos que haga?</h4>
+                            <p class="text-xs text-on-surface-variant">Detectar vibraciones bruscas, filtrar falsos positivos y enviar alertas sonoras y digitales al instante.</p>
+                        </section>
+                    </div>
+                </article>
+
+                <!-- 4. Materiales -->
+                <article class="bg-surface-container-low p-6 rounded-xl border border-outline-variant space-y-4">
+                    <header class="flex items-center gap-3 text-tertiary border-b border-outline-variant pb-3">
+                        <span class="material-symbols-outlined text-2xl">inventory_2</span>
+                        <h3 class="font-headline-md text-xl text-on-surface">4. Materiales</h3>
+                    </header>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+                        <li class="bg-surface-variant p-3 rounded border border-outline-variant">
+                            <strong class="block text-xs text-primary mb-1">Protoboard + Jumpers</strong>
+                            <p class="text-xs text-on-surface-variant">Para interconectar todos los componentes sin necesidad de soldar.</p>
+                        </li>
+                        <li class="bg-surface-variant p-3 rounded border border-outline-variant">
+                            <strong class="block text-xs text-tertiary mb-1">Arduino UNO / ESP32</strong>
+                            <p class="text-xs text-on-surface-variant">Procesa las variables del sensor y se conecta a la red Wi-Fi.</p>
+                        </li>
+                        <li class="bg-surface-variant p-3 rounded border border-outline-variant">
+                            <strong class="block text-xs text-[#4ADE80] mb-1">Sensor Piezoeléctrico / MPU6050</strong>
+                            <p class="text-xs text-on-surface-variant">Mide la aceleración y vibración sísmica en Tinkercad.</p>
+                        </li>
+                        <li class="bg-surface-variant p-3 rounded border border-outline-variant">
+                            <strong class="block text-xs text-secondary mb-1">Buzzer y LEDs</strong>
+                            <p class="text-xs text-on-surface-variant">Dan avisos audibles y visuales locales al activarse.</p>
+                        </li>
+                    </ul>
+                </article>
+
+                <!-- 5. Construcción -->
+                <article class="bg-surface-container-low p-6 rounded-xl border border-outline-variant space-y-4">
+                    <header class="flex items-center gap-3 text-tertiary border-b border-outline-variant pb-3">
+                        <span class="material-symbols-outlined text-2xl">build</span>
+                        <h3 class="font-headline-md text-xl text-on-surface">5. Construcción 🔨</h3>
+                    </header>
+                    <ol class="space-y-3 pt-2">
+                        <li class="bg-surface-variant p-3 rounded border border-outline-variant flex gap-3 items-center">
+                            <span class="font-data-mono text-tertiary font-bold">01.</span>
+                            <p class="text-xs text-on-surface-variant"><strong>Inicio:</strong> Montaje básico en Tinkercad con Arduino UNO en la protoboard y distribución de alimentación (5V y GND).</p>
+                        </li>
+                        <li class="bg-surface-variant p-3 rounded border border-outline-variant flex gap-3 items-center">
+                            <span class="font-data-mono text-tertiary font-bold">02.</span>
+                            <p class="text-xs text-on-surface-variant"><strong>Conexión de Sensores:</strong> Cableado de entradas analógicas para el sensor de vibración y salidas digitales para LEDs/Buzzer.</p>
+                        </li>
+                    </ol>
+                </article>
+
+                <!-- 6. Pruebas y cambios -->
+                <article class="bg-surface-container-low p-6 rounded-xl border border-outline-variant space-y-4">
+                    <header class="flex items-center gap-3 text-tertiary border-b border-outline-variant pb-3">
+                        <span class="material-symbols-outlined text-2xl">checklist</span>
+                        <h3 class="font-headline-md text-xl text-on-surface">6. Pruebas y cambios</h3>
+                    </header>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                        <section class="bg-surface-variant p-4 rounded-lg border border-outline-variant space-y-2">
+                            <h4 class="font-bold text-xs text-[#4ADE80]">¿Qué probamos y qué funcionó?</h4>
+                            <p class="text-xs text-on-surface-variant">Se simularon lecturas analógicas en Tinkercad. El sistema activó los actuadores al sobrepasar el valor definido en el monitor serie.</p>
+                        </section>
+                        <section class="bg-surface-variant p-4 rounded-lg border border-outline-variant space-y-2">
+                            <h4 class="font-bold text-xs text-error">¿Qué problemas encontramos y qué cambiamos?</h4>
+                            <p class="text-xs text-on-surface-variant">Problema: Sensibilidad inconsistente. Cambio: Se ajustó el tiempo de refresco (`delay`) en el código de Arduino para lecturas más estables.</p>
+                        </section>
+                    </div>
+                </article>
+
+                <!-- 7. Resultado -->
+                <article class="bg-surface-container-low p-6 rounded-xl border border-outline-variant space-y-4">
+                    <header class="flex items-center gap-3 text-tertiary border-b border-outline-variant pb-3">
+                        <span class="material-symbols-outlined text-2xl">verified</span>
+                        <h3 class="font-headline-md text-xl text-on-surface">7. Resultado</h3>
+                    </header>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                        <section class="bg-surface-variant p-4 rounded-lg border border-outline-variant">
+                            <h4 class="font-bold text-xs text-primary mb-2">¿Cómo quedó el proyecto?</h4>
+                            <p class="text-xs text-on-surface-variant">Prototipo funcional simulado en Tinkercad listo para probar sus semanas de iteración.</p>
+                        </section>
+                        <section class="bg-surface-variant p-4 rounded-lg border border-outline-variant">
+                            <h4 class="font-bold text-xs text-tertiary mb-2">¿Logra solucionar el problema?</h4>
+                            <p class="text-xs text-on-surface-variant">Demuestra la viabilidad de procesar las señales inmediatamente a nivel de hardware local.</p>
+                        </section>
+                    </div>
+                </article>
+
+            </section>
+
+        </div>
+    </main>
+</div>
+
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface-container border-t border-outline-variant fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe">
+    <a class="flex flex-col items-center text-primary p-1" href="#proyecto">
+        <span class="material-symbols-outlined text-lg">dashboard</span>
+        <span class="font-label-caps text-[9px]">Proyecto</span>
+    </a>
+    <a class="flex flex-col items-center text-on-surface-variant p-1" href="#problematica">
+        <span class="material-symbols-outlined text-lg">warning</span>
+        <span class="font-label-caps text-[9px]">Problema</span>
+    </a>
+    <a class="flex flex-col items-center text-tertiary p-1" href="#proceso-proyecto">
+        <span class="material-symbols-outlined text-lg">engineering</span>
+        <span class="font-label-caps text-[9px]">Página 2</span>
+    </a>
+    <a class="flex flex-col items-center text-[#4ADE80] p-1" href="#planificador-semanal">
+        <span class="material-symbols-outlined text-lg">calendar_month</span>
+        <span class="font-label-caps text-[9px]">Semanas</span>
+    </a>
+</nav>
+
+<!-- VISOR MODAL EN PANTALLA COMPLETA AL DAR CLIC A CUALQUIER IMAGEN -->
+<div id="imageModal" class="fixed inset-0 bg-background/90 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="relative max-w-4xl w-full bg-surface-container-low border border-outline-variant rounded-xl overflow-hidden p-3 shadow-2xl flex flex-col items-center">
+        <button id="closeModal" class="absolute top-4 right-4 text-on-surface bg-surface-variant/80 hover:bg-error hover:text-white h-10 w-10 rounded-full flex items-center justify-center transition-colors z-10">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <img id="modalImage" class="w-full h-auto max-h-[80vh] object-contain rounded" src="" alt="Vista Previa Ampliada"/>
+        <p id="modalCaption" class="font-label-caps text-xs text-on-surface-variant mt-3 text-center"></p>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

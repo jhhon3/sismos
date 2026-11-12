@@ -1,0 +1,45 @@
+/* Cuadrícula técnica de fondo para el sismógrafo */
+.seismograph-grid {
+    background-size: 20px 20px;
+    background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+}
+
+/* EFECTO DE HOVER ZOOM (Amplía la imagen suavemente al pasar el ratón) */
+.zoomable-img {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.zoomable-img:hover {
+    transform: scale(1.08);
+    box-shadow: 0 10px 25px -5px rgba(255, 179, 173, 0.3);
+}
+
+/* Animación horizontal continua de la onda sísmica */
+@keyframes waveMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.animated-wave {
+    animation: waveMove 4s linear infinite;
+}
+
+/* Animación del escáner láser vertical */
+@keyframes scan {
+    0% { left: 0%; opacity: 0; }
+    5% { opacity: 1; }
+    95% { opacity: 1; }
+    100% { left: 100%; opacity: 0; }
+}
+
+.scan-bar {
+    animation: scan 4s linear infinite;
+}
+
+/* Ajustes de margen inferior para dispositivos móviles */
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0.5rem);
+}
